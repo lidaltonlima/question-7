@@ -1,0 +1,72 @@
+{
+  // ==============================================================================================
+  // General
+  // ==============================================================================================
+  // Editor ***************************************************************************************
+  "editor.formatOnSave": true,
+  "files.eol": "\n",
+  "editor.rulers": [79, 99],
+
+  // Fonts ****************************************************************************************
+  "editor.fontSize": 18,
+  "debug.console.fontSize": 16,
+  "terminal.integrated.fontSize": 16,
+
+  // Interface ************************************************************************************
+  "workbench.colorTheme": "OM Theme (Default Dracula Italic)",
+  "workbench.iconTheme": "material-icon-theme",
+  "explorer.compactFolders": false,
+
+  // ==============================================================================================
+  // Languages and files types
+  // ==============================================================================================
+  // Python ***************************************************************************************
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "python.defaultInterpreterPath": ".\\.venv\\Scripts\\python.exe", // ou ./.venv/bin/python Mac/Linux
+  "python.analysis.autoImportCompletions": true,
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.terminal.activateEnvironment": true,
+  "python.languageServer": "Pylance",
+
+  // Pylint ---------------------------------------------------------------------------------------
+  "pylint.enabled": false,
+
+  // Json *****************************************************************************************
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // LaTeX ****************************************************************************************
+  "[latex]": {
+    "editor.defaultFormatter": "James-Yu.latex-workshop"
+  },
+
+  // ==============================================================================================
+  // Extensions
+  // ==============================================================================================
+  // Code Runner **********************************************************************************
+  // "code-runner.saveFileBeforeRun": true,
+  "code-runner.runInTerminal": true,
+  "code-runner.ignoreSelection": true,
+  "code-runner.executorMap": {
+    "python": "clear ; uv run ./src/main.py"
+  },
+  // Code Spell Checker ***************************************************************************
+  "cSpell.language": "en, pt-BR",
+
+  // Copilot ***************************************************************************************
+  "github.copilot.enable": {
+    "*": true,
+    "python": false
+  },
+  "cSpell.words": ["linalg", "printoptions"]
+}
