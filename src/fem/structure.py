@@ -23,7 +23,7 @@ class Structure:
     is_calculated: bool  # Controla se a estrutura já foi calculada
     K: NDArray | None  # Matriz de rigidez global
     F: NDArray | None  # Vetor de forças nodais global
-    disp: NDArray | None  # Vetor de deslocamentos
+    D: NDArray | None  # Vetor de deslocamentos
 
     def __init__(self) -> None:
         self.nodes = []
@@ -33,7 +33,7 @@ class Structure:
         self.is_calculated = False
         self.K = None
         self.F = None
-        self.disp = None
+        self.D = None
 
     def add_node(self, node: Node) -> None:
         """Adiciona nós na estrutura.
@@ -108,4 +108,30 @@ class Structure:
                 F_temp[index_Rz] = 0
 
         # Resolve o sistema linear
-        self.disp = np.linalg.solve(K_temp, F_temp)
+        self.D = np.linalg.solve(K_temp, F_temp)
+
+        # Calcula os esforços nos extremos
+        for element in self.elements:
+            element.end_efforts = self.end_efforts(element)
+
+    def end_efforts(self, element: Element) -> NDArray:
+        """Calcula as tensões internas.
+
+        Args:
+            element (Element): O elemento
+
+        Returns:
+            NDArray: As tesões internas nos extremos.
+        """
+        dg = np.empty(6)  # Deslocamentos nodais no sistema global
+        index_i = self.nodes.index(element.node_i) * 3
+        index_f = index_i + 3
+        dg[:3] = self.D[index_i:index_f]
+
+        index_i = self.nodes.index(element.node_f) * 3
+        index_f = index_i + 3
+        dg[3:] = self.D[index_i:index_f]
+
+        dl = element.R @ dg  # Deslocamentos nodais no sistema local
+
+        return element.kl @ dl - element.fl

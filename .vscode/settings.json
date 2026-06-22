@@ -58,7 +58,7 @@
   "code-runner.runInTerminal": true,
   "code-runner.ignoreSelection": true,
   "code-runner.executorMap": {
-    "python": "clear ; uv run ./src/main.py"
+    "python": "clear ; uv run ./src/um_elemento.py"
   },
   // Code Spell Checker ***************************************************************************
   "cSpell.language": "en, pt-BR",
@@ -68,5 +68,13 @@
     "*": true,
     "python": false
   },
-  "cSpell.words": ["linalg", "printoptions"]
+  "cSpell.words": [
+    "figsize",
+    "horizontalalignment",
+    "linalg",
+    "printoptions",
+    "xlabel",
+    "ylabel",
+    "zorder"
+  ]
 }

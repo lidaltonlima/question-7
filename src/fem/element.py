@@ -27,6 +27,9 @@ class Element:
     kg: NDArray  # Matriz de rigidez local no sistema global
     fl: NDArray  # Vetor de forças local no sistema local
     fg: NDArray  # Vetor de forças local no sistema Global
+    end_efforts: (
+        NDArray | None
+    )  # Cargas nos nós para o diagrama de corpo livre
 
     def __init__(
         self,
@@ -48,6 +51,7 @@ class Element:
         self.kg = self.R.T @ self.kl @ self.R  # Transformação de base
         self.fl = np.zeros(6)
         self.fg = np.zeros(6)
+        self.end_efforts = None
 
     def distribute_to_nodal(self, load: ConstantLoad) -> None:
         """Calcula a carga nodal equivalente devido a carga distribuída

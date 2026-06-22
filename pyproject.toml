@@ -8,7 +8,10 @@ authors = [
     { name = "Lidalton S. de Lima", email = "lidalton.lima@ufop.edu.br" },
 ]
 requires-python = ">=3.14"
-dependencies = ["numpy>=2.4.6"]
+dependencies = [
+    "matplotlib>=3.11.0",
+    "numpy>=2.4.6",
+]
 
 [project.urls]
 # Homepage = "https://www.site.com.br/"
