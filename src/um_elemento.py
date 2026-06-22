@@ -7,8 +7,62 @@ import fem
 import fem.view
 
 np.set_printoptions(
-    linewidth=110, formatter={'float_kind': lambda x: f'{x:.4e}'}
+    linewidth=120, formatter={'float_kind': lambda x: f'{x:.4e}'}
 )
+
+
+def view_plot(
+    diagram: Literal[
+        'Structure',
+        'Reactions',
+        'Normal',
+        'Shear',
+        'Moment',
+    ],
+) -> None:
+    """Visualização da estrutura"""
+    if diagram == 'Structure':
+        # Visualização da estrutura ---------------------------------------
+        fig, ax = plt.subplots(1, 1, layout='constrained')
+        fig.canvas.manager.set_window_title('1 Elemento por Barra')
+        fig.canvas.manager.window.state('zoomed')
+
+        ax.grid()
+
+        fem.view.draw_structure(ax, structure)
+
+        plt.show()
+    else:
+        beam: plt.Axes
+        bar: plt.Axes
+        fig, (beam, bar) = plt.subplots(2, 1, layout='constrained')
+        fig.canvas.manager.set_window_title('1 Elementos por barra')
+        fig.canvas.manager.window.state('zoomed')
+
+        beam.set_title('Viga')
+        bar.set_title('Barra Inclinada')
+
+        # Questão (e) -----------------------------------------------------
+        if diagram == 'Normal':
+            fem.view.fb_diagram(beam, el1, 'Normal')
+            fem.view.fb_diagram(bar, el2, 'Normal')
+
+        elif diagram == 'Shear':
+            fem.view.fb_diagram(beam, el1, 'Shear')
+            fem.view.fb_diagram(bar, el2, 'Shear')
+
+        elif diagram == 'Moment':
+            beam.invert_yaxis()
+            bar.invert_yaxis()
+            fem.view.fb_diagram(beam, el1, 'Moment')
+            fem.view.fb_diagram(bar, el2, 'Moment')
+
+        # Questão (d) -----------------------------------------------------
+        elif diagram == 'Reactions':
+            fem.view.fb_reactions(beam, el1)
+            fem.view.fb_reactions(bar, el2)
+
+        plt.show()
 
 
 # =============================================================================
@@ -72,38 +126,82 @@ structure.calculate()
 # =============================================================================
 # Visualização
 # =============================================================================
-view_types = Literal[
-    'Normal', 'Shear', 'Moment', 'Reactions', 'Structure', 'None'
-]
-diagram: view_types = 'Structure'
+# No terminal *****************************************************************
+# Questão (a) - Matriz de rigidez global --------------------------------------
+print('=' * 100)
+print('Questão A - Matriz de rigidez global')
+print('=' * 100)
+print()
+print(structure.K)
+print()
 
-if diagram == 'Structure':
-    fig, ax = plt.subplots(1, 1, layout='constrained')
-    ax.grid()
-    fem.view.draw_structure(ax, structure)
-    plt.show()
-else:
-    beam: plt.Axes
-    bar: plt.Axes
-    fig, (beam, bar) = plt.subplots(2, 1, layout='constrained')
+# Questão (b) - Vetor de cargas nodais equivalestes do sistema estrutural------
+print()
+print('=' * 100)
+print('Questão B - Vetor de cargas nodais equivalestes do sistema estrutural')
+print('=' * 100)
+print()
+print(structure.F)
+print()
 
-    beam.set_title('Viga')
-    bar.set_title('Barra Inclinada')
+# Questão (c) - Deslocamentos nodais ------------------------------------------
+print()
+print('=' * 100)
+print('Questão C - Deslocamentos nodais')
+print('=' * 100)
+print()
+print(structure.D)
+print()
 
-    if diagram == 'Normal':
-        fem.view.fb_diagram(beam, el1, 'Normal')
-        fem.view.fb_diagram(bar, el2, 'Normal')
+# Com MatPlotLib **************************************************************
+for diagram in [
+    'Structure',
+    'Reactions',
+    'Normal',
+    'Shear',
+    'Moment',
+]:
+    # Boquear visualização durante desenvolvimento
+    if False:
+        if diagram == 'Structure':
+            # Visualização da estrutura ---------------------------------------
+            fig, ax = plt.subplots(1, 1, layout='constrained')
+            fig.canvas.manager.set_window_title('1 Elemento por Barra')
+            fig.canvas.manager.window.state('zoomed')
 
-    elif diagram == 'Shear':
-        fem.view.fb_diagram(beam, el1, 'Shear')
-        fem.view.fb_diagram(bar, el2, 'Shear')
+            ax.grid()
 
-    elif diagram == 'Moment':
-        fem.view.fb_diagram(beam, el1, 'Moment')
-        fem.view.fb_diagram(bar, el2, 'Moment')
+            fem.view.draw_structure(ax, structure)
 
-    elif diagram == 'Reactions':
-        fem.view.fb_reactions(beam, el1)
-        fem.view.fb_reactions(bar, el2)
+            plt.show()
+        else:
+            beam: plt.Axes
+            bar: plt.Axes
+            fig, (beam, bar) = plt.subplots(2, 1, layout='constrained')
+            fig.canvas.manager.set_window_title('1 Elementos por barra')
+            fig.canvas.manager.window.state('zoomed')
 
-    plt.show()
+            beam.set_title('Viga')
+            bar.set_title('Barra Inclinada')
+
+            # Questão (e) -----------------------------------------------------
+            if diagram == 'Normal':
+                fem.view.fb_diagram(beam, el1, 'Normal')
+                fem.view.fb_diagram(bar, el2, 'Normal')
+
+            elif diagram == 'Shear':
+                fem.view.fb_diagram(beam, el1, 'Shear')
+                fem.view.fb_diagram(bar, el2, 'Shear')
+
+            elif diagram == 'Moment':
+                beam.invert_yaxis()
+                bar.invert_yaxis()
+                fem.view.fb_diagram(beam, el1, 'Moment')
+                fem.view.fb_diagram(bar, el2, 'Moment')
+
+            # Questão (d) -----------------------------------------------------
+            elif diagram == 'Reactions':
+                fem.view.fb_reactions(beam, el1)
+                fem.view.fb_reactions(bar, el2)
+
+            plt.show()
