@@ -7,7 +7,7 @@ import fem
 import fem.view
 
 np.set_printoptions(
-    linewidth=120, formatter={'float_kind': lambda x: f'{x:.4e}'}
+    linewidth=150, formatter={'float_kind': lambda x: f'{x:.2e}'}
 )
 
 
@@ -20,7 +20,6 @@ def view_plot(
         'Moment',
     ],
 ) -> None:
-    """Visualização da estrutura"""
     if diagram == 'Structure':
         # Visualização da estrutura ---------------------------------------
         fig, ax = plt.subplots(1, 1, layout='constrained')
@@ -28,9 +27,9 @@ def view_plot(
         fig.canvas.manager.window.state('zoomed')
 
         ax.grid()
-
+        ax.set_xlabel('Eixo X (m)')
+        ax.set_ylabel('Eixo Y (m)')
         fem.view.draw_structure(ax, structure)
-
         plt.show()
     else:
         beam: plt.Axes
@@ -39,8 +38,10 @@ def view_plot(
         fig.canvas.manager.set_window_title('1 Elementos por barra')
         fig.canvas.manager.window.state('zoomed')
 
-        beam.set_title('Viga')
-        bar.set_title('Barra Inclinada')
+        beam.set_title('B1 - Viga')
+        beam.set_xlabel('Comprimento (m)')
+        bar.set_title('B2 - Barra Inclinada')
+        bar.set_xlabel('Comprimento (m)')
 
         # Questão (e) -----------------------------------------------------
         if diagram == 'Normal':
@@ -127,6 +128,10 @@ structure.calculate()
 # Visualização
 # =============================================================================
 # No terminal *****************************************************************
+print('/' * 100)
+print('MALHA DE 1 (UM) ELEMENTO POR BARRA')
+print('/' * 100)
+
 # Questão (a) - Matriz de rigidez global --------------------------------------
 print('=' * 100)
 print('Questão A - Matriz de rigidez global')
@@ -152,56 +157,3 @@ print('=' * 100)
 print()
 print(structure.D)
 print()
-
-# Com MatPlotLib **************************************************************
-for diagram in [
-    'Structure',
-    'Reactions',
-    'Normal',
-    'Shear',
-    'Moment',
-]:
-    # Boquear visualização durante desenvolvimento
-    if False:
-        if diagram == 'Structure':
-            # Visualização da estrutura ---------------------------------------
-            fig, ax = plt.subplots(1, 1, layout='constrained')
-            fig.canvas.manager.set_window_title('1 Elemento por Barra')
-            fig.canvas.manager.window.state('zoomed')
-
-            ax.grid()
-
-            fem.view.draw_structure(ax, structure)
-
-            plt.show()
-        else:
-            beam: plt.Axes
-            bar: plt.Axes
-            fig, (beam, bar) = plt.subplots(2, 1, layout='constrained')
-            fig.canvas.manager.set_window_title('1 Elementos por barra')
-            fig.canvas.manager.window.state('zoomed')
-
-            beam.set_title('Viga')
-            bar.set_title('Barra Inclinada')
-
-            # Questão (e) -----------------------------------------------------
-            if diagram == 'Normal':
-                fem.view.fb_diagram(beam, el1, 'Normal')
-                fem.view.fb_diagram(bar, el2, 'Normal')
-
-            elif diagram == 'Shear':
-                fem.view.fb_diagram(beam, el1, 'Shear')
-                fem.view.fb_diagram(bar, el2, 'Shear')
-
-            elif diagram == 'Moment':
-                beam.invert_yaxis()
-                bar.invert_yaxis()
-                fem.view.fb_diagram(beam, el1, 'Moment')
-                fem.view.fb_diagram(bar, el2, 'Moment')
-
-            # Questão (d) -----------------------------------------------------
-            elif diagram == 'Reactions':
-                fem.view.fb_reactions(beam, el1)
-                fem.view.fb_reactions(bar, el2)
-
-            plt.show()

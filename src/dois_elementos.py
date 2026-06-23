@@ -7,7 +7,7 @@ import fem
 import fem.view
 
 np.set_printoptions(
-    linewidth=110, formatter={'float_kind': lambda x: f'{x:.4e}'}
+    linewidth=150, formatter={'float_kind': lambda x: f'{x:.2e}'}
 )
 
 
@@ -29,6 +29,8 @@ def view_plot(
         fig.canvas.manager.set_window_title('2 Elementos por Barra')
         fig.canvas.manager.window.state('zoomed')
         ax.grid()
+        ax.set_xlabel('Eixo X (m)')
+        ax.set_ylabel('Eixo Y (m)')
         fem.view.draw_structure(ax, structure)
         plt.show()
     else:
@@ -42,10 +44,14 @@ def view_plot(
         fig.canvas.manager.set_window_title('2 Elementos por Barra')
         fig.canvas.manager.window.state('zoomed')
 
-        beam_a.set_title('Viga - Parte A')
-        beam_b.set_title('Viga - Parte B')
-        bar_a.set_title('Barra Inclinada - Parte A')
-        bar_b.set_title('Barra Inclinada - Parte B')
+        beam_a.set_title('B1A - Viga - Parte A')
+        beam_a.set_xlabel('Comprimento (m)')
+        beam_b.set_title('B1B - Viga - Parte B')
+        beam_b.set_xlabel('Comprimento (m)')
+        bar_a.set_title('B2A - Barra Inclinada - Parte A')
+        bar_a.set_xlabel('Comprimento (m)')
+        bar_b.set_title('B2B - Barra Inclinada - Parte B')
+        bar_b.set_xlabel('Comprimento (m)')
 
         if diagram == 'Normal':
             fem.view.fb_diagram(beam_a, el1a, 'Normal')
@@ -144,3 +150,37 @@ structure.add_support(support)
 # Cálculo
 # =============================================================================
 structure.calculate()
+
+# =============================================================================
+# Visualização
+# =============================================================================
+# No terminal *****************************************************************
+print('/' * 100)
+print('MALHA DE 2 (DOIS) ELEMENTOS POR BARRA')
+print('/' * 100)
+
+# Questão (a) - Matriz de rigidez global --------------------------------------
+print('=' * 100)
+print('Questão A - Matriz de rigidez global')
+print('=' * 100)
+print()
+print(structure.K)
+print()
+
+# Questão (b) - Vetor de cargas nodais equivalestes do sistema estrutural------
+print()
+print('=' * 100)
+print('Questão B - Vetor de cargas nodais equivalestes do sistema estrutural')
+print('=' * 100)
+print()
+print(structure.F)
+print()
+
+# Questão (c) - Deslocamentos nodais ------------------------------------------
+print()
+print('=' * 100)
+print('Questão C - Deslocamentos nodais')
+print('=' * 100)
+print()
+print(structure.D)
+print()

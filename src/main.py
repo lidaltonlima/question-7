@@ -1,7 +1,16 @@
 import tkinter as tk
 
+import matplotlib.pyplot as plt
+
 import dois_elementos
 import um_elemento
+
+# Altera o tamanho global das fontes
+plt.rcParams.update(
+    {
+        'font.size': 16,  # Tamanho base para textos
+    }
+)
 
 # =============================================================================
 # Inicialização da janela
@@ -11,7 +20,7 @@ root.title('QUESTÃO 7')  # Modifica o título
 
 # Defina o tamanho da sua janela
 width = 500
-height = 200
+height = 250
 
 # Obtenha a resolução do monitor
 screen_width = root.winfo_screenwidth()
